@@ -5,6 +5,7 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
+import routes from './routes/index'
 
 
 // Middleware
@@ -17,9 +18,7 @@ app.use(cookieParser())
 
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({ msg: 'Hello DevAT-Channel'})
-})
+app.use('/api', routes.authRouter)
 
 
 // Database
