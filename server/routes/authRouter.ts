@@ -6,5 +6,7 @@ const router = express.Router()
 
 router.post('/register', validRegister, authCtrl.register)
 
+router.post('/active', authCtrl.activeAccount)
+
 
 export default router;
