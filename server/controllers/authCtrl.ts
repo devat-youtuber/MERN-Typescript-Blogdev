@@ -2,11 +2,11 @@ import { Request, Response } from 'express'
 import Users from '../models/userModel'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { generateActiveToken } from '../config/generateToken'
+import { generateActiveToken, generateAccessToken, generateRefreshToken } from '../config/generateToken'
 import sendMail from '../config/sendMail'
 import { validateEmail, validPhone } from '../middleware/vaild'
 import { sendSms } from '../config/sendSMS'
-import { IDecodedToken } from '../config/interface'
+import { IDecodedToken, IUser } from '../config/interface'
 
 
 const CLIENT_URL = `${process.env.BASE_URL}`
@@ -69,6 +69,70 @@ const authCtrl = {
       return res.status(500).json({msg: errMsg})
     }
   },
+  login: async(req: Request, res: Response) => {
+    try {
+      const { account, password } = req.body
+
+      const user = await Users.findOne({account})
+      if(!user) return res.status(400).json({msg: 'This account does not exits.'})
+
+      // if user exists
+      loginUser(user, password, res)
+
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  logout: async(req: Request, res: Response) => {
+    try {
+      res.clearCookie('refreshtoken', { path: `/api/refresh_token` })
+      return res.json({msg: "Logged out!"})
+
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  refreshToken: async(req: Request, res: Response) => {
+    try {
+      const rf_token = req.cookies.refreshtoken
+      if(!rf_token) return res.status(400).json({msg: "Please login now!"})
+
+      const decoded = <IDecodedToken>jwt.verify(rf_token, `${process.env.REFRESH_TOKEN_SECRET}`)
+      if(!decoded.id) return res.status(400).json({msg: "Please login now!"})
+
+      const user = await Users.findById(decoded.id).select("-password")
+      if(!user) return res.status(400).json({msg: "This account does not exist."})
+
+      const access_token = generateAccessToken({id: user._id})
+
+      res.json({access_token})
+      
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+}
+
+
+const loginUser = async (user: IUser, password: string, res: Response) => {
+  const isMatch = await bcrypt.compare(password, user.password)
+  if(!isMatch) return res.status(400).json({msg: "Password is incorrect."})
+
+  const access_token = generateAccessToken({id: user._id})
+  const refresh_token = generateRefreshToken({id: user._id})
+
+  res.cookie('refreshtoken', refresh_token, {
+    httpOnly: true,
+    path: `/api/refresh_token`,
+    maxAge: 30*24*60*60*1000 // 30days
+  })
+
+  res.json({
+    msg: 'Login Success!',
+    access_token,
+    user: { ...user._doc, password: '' }
+  })
+
 }
 
 
