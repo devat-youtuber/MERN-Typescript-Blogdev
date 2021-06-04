@@ -1,5 +1,5 @@
 # MERN STACK + TYPESCRIPT + REDUX | BLOG TUTORIAL 
-## MERN Stack Build  a blog app using MERN  + Typescript + Redux  + Bootstrap 4 + ReactQuill + Socket.io + Twilio
+## MERN Stack Build  a blog app using MERN  + Typescript + Redux  + Bootstrap 5 + ReactQuill + Socket.io + Twilio
 > + Register, login with Email or Phone number.
 > + Quick login with Google, Facebook, SMS.
 > + Forgot password, reset password and register a new account by Email or SMS verification.
