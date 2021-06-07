@@ -1,0 +1,27 @@
+.auth_page{
+  width: 100%;
+  padding: 2.5rem 0;
+  background: #fdfdfd;
+  display: flex;
+  justify-content: center;
+}
+
+.auth_page .auth_box{
+  background: #fff;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 2.7rem 1.7rem;
+}
+
+.auth_page .pass{
+  position: relative;
+}
+.auth_page .pass small{
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.5;
+}
