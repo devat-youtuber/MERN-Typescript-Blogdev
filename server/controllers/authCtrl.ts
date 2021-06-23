@@ -6,9 +6,12 @@ import { generateActiveToken, generateAccessToken, generateRefreshToken } from '
 import sendMail from '../config/sendMail'
 import { validateEmail, validPhone } from '../middleware/vaild'
 import { sendSms } from '../config/sendSMS'
-import { IDecodedToken, IUser } from '../config/interface'
+import { IDecodedToken, IUser, IGgPayload, IUserParams } from '../config/interface'
+
+import { OAuth2Client } from 'google-auth-library'
 
 
+const client = new OAuth2Client(`${process.env.MAIL_CLIENT_ID}`)
 const CLIENT_URL = `${process.env.BASE_URL}`
 
 const authCtrl = {
@@ -105,6 +108,42 @@ const authCtrl = {
       return res.status(500).json({msg: err.message})
     }
   },
+  googleLogin: async(req: Request, res: Response) => {
+    try {
+      const { id_token } = req.body
+      const verify = await client.verifyIdToken({
+        idToken: id_token, audience: `${process.env.MAIL_CLIENT_ID}`
+      })
+
+      const {
+        email, email_verified, name, picture
+      } = <IGgPayload>verify.getPayload()
+
+      if(!email_verified)
+        return res.status(500).json({msg: "Email verification failed."})
+
+      const password = email + 'your google secrect password'
+      const passwordHash = await bcrypt.hash(password, 12)
+
+      const user = await Users.findOne({account: email})
+
+      if(user){
+        loginUser(user, password, res)
+      }else{
+        const user = {
+          name, 
+          account: email, 
+          password: passwordHash, 
+          avatar: picture,
+          type: 'login'
+        }
+        registerUser(user, res)
+      }
+      
+    } catch (err: any) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
 }
 
 
@@ -129,5 +168,25 @@ const loginUser = async (user: IUser, password: string, res: Response) => {
 
 }
 
+const registerUser = async (user: IUserParams, res: Response) => {
+  const newUser = new Users(user)
+  await newUser.save()
+
+  const access_token = generateAccessToken({id: newUser._id})
+  const refresh_token = generateRefreshToken({id: newUser._id})
+
+  res.cookie('refreshtoken', refresh_token, {
+    httpOnly: true,
+    path: `/api/refresh_token`,
+    maxAge: 30*24*60*60*1000 // 30days
+  })
+
+  res.json({
+    msg: 'Login Success!',
+    access_token,
+    user: { ...newUser._doc, password: '' }
+  })
+
+}
 
 export default authCtrl;
