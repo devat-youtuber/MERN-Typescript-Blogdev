@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { generateActiveToken, generateAccessToken, generateRefreshToken } from '../config/generateToken'
 import sendMail from '../config/sendMail'
 import { validateEmail, validPhone } from '../middleware/vaild'
-import { sendSms } from '../config/sendSMS'
+import { sendSms, smsOTP, smsVerify } from '../config/sendSMS'
 import { IDecodedToken, IUser, IGgPayload, IUserParams } from '../config/interface'
 
 import { OAuth2Client } from 'google-auth-library'
@@ -177,6 +177,43 @@ const authCtrl = {
         registerUser(user, res)
       } 
       
+    } catch (err: any) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  loginSMS: async(req: Request, res: Response) => {
+    try {
+      const { phone } = req.body
+      const data = await smsOTP(phone, 'sms')
+      res.json(data)
+    } catch (err: any) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  smsVerify: async(req: Request, res: Response) => {
+    try {
+      const { phone, code } = req.body
+
+      const data = await smsVerify(phone, code)
+      if(!data?.valid) return res.status(400).json({msg: "Invalid Authentication."})
+
+      const password = phone + 'your phone secrect password'
+      const passwordHash = await bcrypt.hash(password, 12)
+
+      const user = await Users.findOne({account: phone})
+
+      if(user){
+        loginUser(user, password, res)
+      }else{
+        const user = {
+          name: phone, 
+          account: phone, 
+          password: passwordHash, 
+          type: 'login'
+        }
+        registerUser(user, res)
+      } 
+
     } catch (err: any) {
       return res.status(500).json({msg: err.message})
     }
