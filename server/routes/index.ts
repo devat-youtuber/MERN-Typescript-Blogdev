@@ -1,7 +1,9 @@
 import authRouter from './authRouter'
+import userRouter from './userRouter'
 
 const routes = {
-  authRouter
+  authRouter,
+  userRouter
 }
 
 export default routes;
