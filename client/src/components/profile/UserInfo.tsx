@@ -5,7 +5,7 @@ import { RootStore, InputChange, IUserProfile, FormSubmit } from '../../utils/Ty
 
 import NotFound from '../global/NotFound'
 
-import { updateUser } from '../../redux/actions/profileAction'
+import { updateUser, resetPassword } from '../../redux/actions/profileAction'
 
 const UserInfo = () => {
   const initState = {
@@ -19,10 +19,12 @@ const UserInfo = () => {
   const [typePass, setTypePass] = useState(false)
   const [typeCfPass, setTypeCfPass] = useState(false)
 
+
   const handleChangeInput = (e: InputChange) => {
     const { name, value } = e.target
     setUser({ ...user, [name]:value })
   }
+
 
   const handleChangeFile = (e: InputChange) => {
     const target = e.target as HTMLInputElement
@@ -34,13 +36,18 @@ const UserInfo = () => {
     }
   } 
 
+
   const handleSubmit = (e: FormSubmit) => {
     e.preventDefault()
     if(avatar || name)
       dispatch(updateUser((avatar as File), name, auth))
+
+    if(password && auth.access_token)
+      dispatch(resetPassword(password, cf_password, auth.access_token))
   }
 
-  const { name, account, avatar, password, cf_password } = user
+
+  const { name, avatar, password, cf_password } = user
 
   if(!auth.user) return <NotFound />
   return (
@@ -73,6 +80,13 @@ const UserInfo = () => {
         onChange={handleChangeInput} disabled={true} />
       </div>
 
+      {
+        auth.user.type !== 'register' &&
+        <small className="text-danger">
+          * Quick login account with {auth.user.type} can't use this function *
+        </small>
+      }
+
       <div className="form-group my-3">
         <label htmlFor="password">Password</label>
 
@@ -80,7 +94,8 @@ const UserInfo = () => {
           <input type={typePass ? "text" : "password"} 
           className="form-control" id="password"
           name="password" value={password}
-          onChange={handleChangeInput} />
+          onChange={handleChangeInput}
+          disabled={auth.user.type !== 'register'} />
 
           <small onClick={() => setTypePass(!typePass)}>
             { typePass ? 'Hide' : 'Show'}
@@ -95,7 +110,8 @@ const UserInfo = () => {
           <input type={typeCfPass ? "text" : "password"} 
           className="form-control" id="cf_password"
           name="cf_password" value={cf_password}
-          onChange={handleChangeInput} />
+          onChange={handleChangeInput} 
+          disabled={auth.user.type !== 'register'} />
 
           <small onClick={() => setTypeCfPass(!typeCfPass)}>
             { typeCfPass ? 'Hide' : 'Show'}
