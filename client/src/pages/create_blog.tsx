@@ -7,6 +7,8 @@ import NotFound from '../components/global/NotFound'
 import CreateForm from '../components/cards/CreateForm'
 import CardHoriz from '../components/cards/CardHoriz'
 
+import ReactQuill from '../components/editor/ReactQuill'
+
 
 const CreateBlog = () => {
   const initState = {
@@ -20,9 +22,11 @@ const CreateBlog = () => {
   }
 
   const [blog, setBlog] = useState<IBlog>(initState)
+  const [body, setBody] = useState('')
 
   const { auth, categories } = useSelector((state: RootStore) => state)
   const dispatch = useDispatch()
+
 
 
   if(!auth.access_token) return <NotFound />;
@@ -41,6 +45,11 @@ const CreateBlog = () => {
         </div>
       </div>  
 
+      <ReactQuill setBody={setBody} />
+      
+      <button className="btn btn-dark mt-3 d-block mx-auto">
+        Create Post
+      </button>
     </div>
   )
 }
