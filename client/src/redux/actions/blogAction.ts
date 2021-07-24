@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux'
 import { IBlog } from '../../utils/TypeScript'
 import { imageUpload } from '../../utils/ImageUpload'
+import { postAPI } from '../../utils/FetchData'
+
 import { ALERT, IAlertType } from '../types/alertType'
 
 export const createBlog = (blog: IBlog, token: string) => 
@@ -17,6 +19,9 @@ async (dispatch: Dispatch<IAlertType>) => {
     }
     
     const newBlog = {...blog, thumbnail: url}
+    
+    const res = await postAPI('blog', newBlog, token)
+    console.log(res)
 
     dispatch({ type: ALERT, payload: { loading: false } })
   } catch (err: any) {
