@@ -7,7 +7,9 @@ import { ALERT, IAlertType } from '../types/alertType'
 
 import {
   GET_HOME_BLOGS,
-  IGetHomeBlogsType
+  IGetHomeBlogsType,
+  GET_BLOGS_CATEGORY_ID,
+  IGetBlogsCategoryType
 } from '../types/blogType'
 
 export const createBlog = (blog: IBlog, token: string) => 
@@ -45,6 +47,25 @@ async (dispatch: Dispatch<IAlertType | IGetHomeBlogsType>) => {
     dispatch({
       type: GET_HOME_BLOGS,
       payload: res.data
+    })
+    
+    dispatch({ type: ALERT, payload: { loading: false } })
+  } catch (err: any) {
+    dispatch({ type: ALERT, payload: {errors: err.response.data.msg} })
+  }
+}
+
+
+export const getBlogsByCategoryId = (id: string) => 
+async (dispatch: Dispatch<IAlertType | IGetBlogsCategoryType>) => {
+  try {
+    dispatch({ type: ALERT, payload: { loading: true } })
+
+    const res = await getAPI(`blogs/${id}`)
+
+    dispatch({
+      type: GET_BLOGS_CATEGORY_ID,
+      payload: {...res.data, id }
     })
     
     dispatch({ type: ALERT, payload: { loading: false } })

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { RootStore, IBlog } from '../utils/TypeScript'
 import { validCreateBlog } from '../utils/Valid'
-import { imageUpload } from '../utils/ImageUpload'
 
 import NotFound from '../components/global/NotFound'
 import CreateForm from '../components/cards/CreateForm'
