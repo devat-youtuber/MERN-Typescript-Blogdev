@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-
-import NotFound from '../../components/global/NotFound'
-import CardVert from '../../components/cards/CardVert'
 
 import { getBlogsByCategoryId } from '../../redux/actions/blogAction'
 
 import { RootStore, IParams, IBlog } from '../../utils/TypeScript'
 
+import Loading from '../../components/global/Loading'
+import Pagination from '../../components/global/Pagination'
+import CardVert from '../../components/cards/CardVert'
 
 
 const BlogsByCategory = () => {
@@ -20,6 +20,9 @@ const BlogsByCategory = () => {
   const [blogs, setBlogs] = useState<IBlog[]>()
   const [total, setTotal] = useState(0)
 
+  const history = useHistory()
+  const { search } = history.location;
+
   useEffect(() => {
     const category = categories.find(item => item.name === slug)
     if(category) setCategoryId(category._id)
@@ -30,17 +33,25 @@ const BlogsByCategory = () => {
     if(!categoryId) return;
 
     if(blogsCategory.every(item => item.id !== categoryId)){
-      dispatch(getBlogsByCategoryId(categoryId))
+      dispatch(getBlogsByCategoryId(categoryId, search))
     }else{
       const data = blogsCategory.find(item => item.id === categoryId)
       if(!data) return;
       setBlogs(data.blogs)
       setTotal(data.total)
+
+      if(data.search) history.push(data.search)
     }
-  },[categoryId, blogsCategory, dispatch])
+  },[categoryId, blogsCategory, dispatch, search, history])
+  
+
+  const handlePagination = (num: number) => {
+    const search = `?page=${num}`
+    dispatch(getBlogsByCategoryId(categoryId, search))
+  }
 
 
-  if(!blogs) return <NotFound />;
+  if(!blogs) return <Loading />;
   return (
     <div className="blogs_category">
       <div className="show_blogs">
@@ -50,6 +61,15 @@ const BlogsByCategory = () => {
           ))
         }
       </div>
+      
+      {
+        total > 1 &&
+        <Pagination 
+        total={total}
+        callback={handlePagination}
+        />
+      }
+     
     </div>
   )
 }

@@ -11,7 +11,16 @@ const blogsCategoryReducer = (
 ): IBlogsCategory[] => {
   switch(action.type){
     case GET_BLOGS_CATEGORY_ID:
-      return [...state, action.payload]
+      if(state.every(item => item.id !== action.payload.id)){
+        return [...state, action.payload]
+
+      }else{
+        return state.map(blog => (
+          blog.id === action.payload.id
+          ? action.payload
+          : blog
+        ))
+      }
 
     default:
       return state;
