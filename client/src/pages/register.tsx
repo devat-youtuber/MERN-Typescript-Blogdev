@@ -1,9 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import RegisterForm from '../components/auth/RegisterForm'
 
 const Register = () => {
+  const history = useHistory()
 
   return (
     <div className="auth_page">
@@ -14,7 +15,7 @@ const Register = () => {
         
         <p className="mt-2">
           {`Already have an account? `}
-          <Link to={`/login`} style={{color: 'crimson'}}>
+          <Link to={`/login${history.location.search}`} style={{color: 'crimson'}}>
             Login Now
           </Link>
         </p>

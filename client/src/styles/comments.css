@@ -1,0 +1,29 @@
+.avatar_comment{
+  width: 70px;
+  min-width: 70px;
+  text-align: center;
+  padding: 5px;
+}
+
+.avatar_comment img{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar_comment small a{
+  color: #444;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.avatar_comment small a:hover{
+  color: crimson;
+}
+
+.comment_box {
+  width: 100%;
+  border: 1px solid #ddd;
+  margin-bottom: 0.75rem;
+}
