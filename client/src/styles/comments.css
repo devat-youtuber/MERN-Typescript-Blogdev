@@ -45,3 +45,15 @@
   opacity: 0.5;
   font-size: 11px;
 }
+
+.comment_box .comment_nav {
+  cursor: pointer;
+  display: none;
+}
+
+.comment_box:hover .comment_nav {
+  display: block;
+}
+.comment_box .comment_nav i:hover {
+  color: crimson;
+}
