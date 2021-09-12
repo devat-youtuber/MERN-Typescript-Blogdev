@@ -9,9 +9,10 @@ import { ALERT } from '../../redux/types/alertType'
 
 interface IProps {
   setBody: (value: string) => void
+  body: string
 }
 
-const Quill: React.FC<IProps> = ({setBody}) => {
+const Quill: React.FC<IProps> = ({setBody, body}) => {
   const dispatch = useDispatch()
   const quillRef = useRef<ReactQuill>(null)
 
@@ -62,6 +63,7 @@ const Quill: React.FC<IProps> = ({setBody}) => {
       modules={modules}
       placeholder="Write somethings..."
       onChange={e => setBody(e)}
+      value={body}
       ref={quillRef} />
     </div>
   )
