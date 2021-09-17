@@ -26,6 +26,12 @@ const Menu = () => {
     if(pn === pathname) return 'active';
   }
 
+  const handleLogout = () => {
+    if(!auth.access_token) return;
+    dispatch(logout(auth.access_token))
+  }
+
+
   return (
     <ul className="navbar-nav ms-auto">
       {
@@ -63,7 +69,7 @@ const Menu = () => {
 
             <li>
               <Link className="dropdown-item" to="/"
-              onClick={() => dispatch(logout())}>
+              onClick={handleLogout}>
                 Logout
               </Link>
             </li>

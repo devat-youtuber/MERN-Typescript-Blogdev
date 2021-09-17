@@ -5,6 +5,7 @@ import { ALERT, IAlertType } from '../types/alertType'
 import { IUserLogin, IUserRegister } from '../../utils/TypeScript'
 import { postAPI, getAPI } from '../../utils/FetchData'
 import { validRegister, validPhone } from '../../utils/Valid'
+import { checkTokenExp } from '../../utils/checkTokenExp'
 
 
 export const login = (userLogin: IUserLogin) => 
@@ -63,12 +64,15 @@ async (dispatch: Dispatch<IAuthType | IAlertType>) => {
 }
 
 
-export const logout = () => 
+export const logout = (token: string) => 
 async (dispatch: Dispatch<IAuthType | IAlertType>) => {
+  const result = await checkTokenExp(token, dispatch)
+  const access_token = result ? result : token
+  
   try {
     localStorage.removeItem('logged')
     dispatch({ type: AUTH, payload: { } })
-    await getAPI('logout')
+    await getAPI('logout', access_token)
   } catch (err: any) {
     dispatch({ type: ALERT, payload: { errors: err.response.data.msg } })
   }
