@@ -30,7 +30,7 @@ const CardHoriz: React.FC<IProps> = ({blog}) => {
   }
 
   return (
-    <div className="card mb-3" style={{minWidth: "280px"}}>
+    <div className="card mb-3" style={{minWidth: "260px"}}>
       <div className="row g-0 p-2">
         <div className="col-md-4" style={{
           minHeight: '150px', maxHeight: '170px', overflow: 'hidden'
