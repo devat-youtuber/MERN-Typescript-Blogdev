@@ -13,7 +13,7 @@ export const generateActiveToken = (payload: object) => {
 }
 
 export const generateAccessToken = (payload: object) => {
-  return jwt.sign(payload, `${ACCESS_TOKEN_SECRET}`, {expiresIn: '15s'})
+  return jwt.sign(payload, `${ACCESS_TOKEN_SECRET}`, {expiresIn: '15m'})
 }
 
 export const generateRefreshToken = (payload: object, res: Response) => {

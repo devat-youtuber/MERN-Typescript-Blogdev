@@ -234,6 +234,36 @@ const authCtrl = {
       return res.status(500).json({msg: err.message})
     }
   },
+  forgotPassword: async(req: Request, res: Response) => {
+    try {
+      const { account } = req.body
+
+      const user = await Users.findOne({account})
+      if(!user)
+        return res.status(400).json({msg: 'This account does not exist.'})
+
+      if(user.type !== 'register')
+        return res.status(400).json({
+          msg: `Quick login account with ${user.type} can't use this function.`
+        })
+
+      const access_token = generateAccessToken({id: user._id})
+
+      const url = `${CLIENT_URL}/reset_password/${access_token}`
+
+      if(validPhone(account)){
+        sendSms(account, url, "Forgot password?")
+        return res.json({msg: "Success! Please check your phone."})
+
+      }else if(validateEmail(account)){
+        sendMail(account, url, "Forgot password?")
+        return res.json({msg: "Success! Please check your email."})
+      }
+
+    } catch (err: any) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
 }
 
 
