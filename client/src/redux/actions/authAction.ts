@@ -60,6 +60,7 @@ async (dispatch: Dispatch<IAuthType | IAlertType>) => {
     dispatch({ type: ALERT, payload: { } })
   } catch (err: any) {
     dispatch({ type: ALERT, payload: { errors: err.response.data.msg } })
+    localStorage.removeItem('logged')
   }
 }
 

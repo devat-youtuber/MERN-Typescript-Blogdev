@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "ts-node-dev server/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "heroku-postbuild": "tsc && cd client && npm i --only=dev && npm i && npm run build"
   },
   "keywords": [],
   "author": "",

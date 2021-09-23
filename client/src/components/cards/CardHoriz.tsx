@@ -70,7 +70,7 @@ const CardHoriz: React.FC<IProps> = ({blog}) => {
                 align-items-center"
               >
                 {
-                  (slug === auth.user?._id) &&
+                  (auth.user && slug === auth.user._id) &&
                   <div style={{cursor: 'pointer'}}>
                     <Link to={`/update_blog/${blog._id}`}>
                       <i className="fas fa-edit" title="edit" />
