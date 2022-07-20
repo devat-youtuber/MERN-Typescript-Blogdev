@@ -8,11 +8,9 @@
 > + Comment realtime with Socket.io
 > + Pagination, search with autocomplete Mongodb
 
-## Demo: https://blog-dev-test.herokuapp.com/
+## Author: Dev A.T Viet Nam
 
-## Author: Dev AT
-
-## Youtube tutorials: https://www.youtube.com/watch?v=de-204MM0tU&list=PLs4co9a6NhMw7xB4xPSkSQRM8uQVAZak6
+## Youtube tutorials: https://youtube.com/playlist?list=PLs4co9a6NhMw7xB4xPSkSQRM8uQVAZak6
 
 ## Install dependencies for server 
 ### `npm install`
@@ -34,14 +32,7 @@
 > + 👉 Buy Me a Coffee . Thank You ! 💗 :
 > + 👉 https://www.buymeacoffee.com/QK1DkYS
 > + 👉 Paypal : https://paypal.me/tuananh251192
-> + 👉 Patreon: https://www.patreon.com/dev_at
 
 ### 👻👻VietNam: 
 > + 👉Vietcombank: 0061001044348 (LE TUAN ANH)
 > + 👉Momo : 0374481936
-
-### Interface 
-
-![alt](https://res.cloudinary.com/devat-channel/image/upload/v1621568302/samples/Untitled_qobudj.png)
-
-
