@@ -32,7 +32,6 @@
 > + 👉 Buy Me a Coffee . Thank You ! 💗 :
 > + 👉 https://www.buymeacoffee.com/QK1DkYS
 > + 👉 Paypal : https://paypal.me/tuananh251192
-> + 👉 Patreon: https://www.patreon.com/dev_at
 
 ### 👻👻VietNam: 
 > + 👉Vietcombank: 0061001044348 (LE TUAN ANH)
